@@ -124,7 +124,8 @@
             //var top = 1;
             //debugger;
             return new THREE.Matrix4().makePerspective(-left, right, top,-bottom, znear, zfar);
-        }
+      
+	}
 
     }
 
@@ -272,6 +273,7 @@
                 plane.rotation.y = -Math.PI / 2;
             } else if (displaySurface.name === "Floor") {
                 plane.rotation.x = Math.PI / 2;
+		plane.rotation.z = Math.PI;
             } else if (displaySurface.name === "Ceiling") {
                 plane.rotation.x = -Math.PI / 2;
             } else if (displaySurface.name === "Back") {
