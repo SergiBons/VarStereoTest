@@ -415,8 +415,7 @@
 	    }
 	    var gl = renderer.getContext();
 	    renderer.setAnimationLoop(animate);
-	    if (showScene)
-            	renderer.render(scene, camera);
+	    
 	    // Rotate the cube (or other scene updates)
 	    const cube = scene.getObjectByName("Cube");
 	    if (cube) {
@@ -426,6 +425,8 @@
 	// Clear and render logic
 	renderer.setClearColor(0x808080);
 	renderer.clear();
+	    if (showScene)
+		renderer.render(scene, camera);
 	renderer.render(displaySurfaceScene, camera);
 	// 2. render scene objects onto a texture, for each target
 	if(isVR){
