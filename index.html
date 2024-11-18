@@ -381,9 +381,8 @@
         return eye.getWorldPosition(new THREE.Vector3());
     }
 
-    function cameraFromViewProj(view, proj)
+    function cameraFromViewProj(view, proj, cam)
     {
-        var cam = camera.clone();
         var inv = new THREE.Matrix4();
         inv.copy(view).invert();
         cam.position.set(inv.elements[12], inv.elements[13], inv.elements[14]);
@@ -426,9 +425,7 @@
 				var eye = getLeftEyePosition();
 		            	var view = displaySurface.viewMatrix(eye);
 		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-		            	var leftCamera = cameraFromViewProj(view, proj);
-				lCam = xrCamera.cameras[0];
-				lCam.projectionMatrix.copy(proj);
+		            	var leftCamera = cameraFromViewProj(view, proj, xrCamera.cameras[0]);
 			        renderer.render(scene, leftCamera);
 
 			        //Simulate right eye (blue-green tint)
@@ -436,10 +433,8 @@
 			        var eye = getRightEyePosition();
 		            	var view = displaySurface.viewMatrix(eye);
 		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-		            	var rightCamera = cameraFromViewProj(view, proj);
+		            	var rightCamera = cameraFromViewProj(view, proj, xrCamera.cameras[1]);
 			        renderer.clearDepth(); // Clear depth buffer for second pass
-				rCam = xrCamera.cameras[1];
-				rCam.projectionMatrix.copy(proj);
 			        renderer.render(scene, rightCamera);
 			
 			        // Reset color mask to default
@@ -464,7 +459,7 @@
 		var eye = getLeftEyePosition();
             	var view = displaySurface.viewMatrix(eye);
             	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-            	var leftCamera = cameraFromViewProj(view, proj);
+            	var leftCamera = cameraFromViewProj(view, proj, camera);
 	        renderer.render(scene, leftCamera);
 	
 	        // Simulate right eye (blue-green tint)
@@ -472,7 +467,7 @@
 	        var eye = getRightEyePosition();
             	var view = displaySurface.viewMatrix(eye);
             	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-            	var rightCamera = cameraFromViewProj(view, proj);
+            	var rightCamera = cameraFromViewProj(view, proj, camera);
 	        renderer.clearDepth(); // Clear depth buffer for second pass
 	        renderer.render(scene, rightCamera);
 	
