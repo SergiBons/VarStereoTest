@@ -398,6 +398,7 @@
 	getHeadsetPosition();
         var gl = renderer.getContext();
         renderer.setAnimationLoop(animate);
+	const xrCamera = renderer.xr.getCamera(camera);//VR camera init
         //Rotating Cube
         var cube = scene.getObjectByName("Cube");
         if (cube) {
@@ -493,6 +494,16 @@
 
             //console.log("Headset Position: ", headsetPosition);
         }
+    }
+
+    function getLeftEyePosition() {
+    const xrCamera = renderer.xr.getCamera(camera);
+    return xrCamera.cameras[0].position.clone(); // Left eye
+    }
+
+    function getRightEyePosition() {
+    const xrCamera = renderer.xr.getCamera(camera);
+    return xrCamera.cameras[1].position.clone(); // Right eye
     }
 
 
