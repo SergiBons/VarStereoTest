@@ -392,91 +392,98 @@
     }
 
     // refresh function
-   var animate = function () {
-    const isVR = renderer.xr.isPresenting;
-
-    // Check if the session exists
-    const session = renderer.xr.getSession();
-    if (session) {
-        const referenceSpace = renderer.xr.getReferenceSpace();
-
-        // Request the current XRFrame
-        const frame = renderer.xr.getFrame(); // Manually fetch the frame
-        if (frame) {
-            const pose = frame.getViewerPose(referenceSpace);
-
-            if (pose) {
-                const xrCamera = renderer.xr.getCamera(camera);
-                const position = pose.transform.position;
-                const orientation = pose.transform.orientation;
-
-                // Update the VR camera with position and orientation
-                xrCamera.position.set(position.x, position.y, position.z);
-                xrCamera.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
-            }
-        }
-    }
-
-    // Rotate the cube (or other scene updates)
-    const cube = scene.getObjectByName("Cube");
-    if (cube) {
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-    }
-
-    // Clear and render logic
-    renderer.setClearColor(0x808080);
-    renderer.clear();
-
-    if (isVR) {
-        // Handle VR rendering with dual views
-        const xrCamera = renderer.xr.getCamera(camera);
-        for (let [index, displaySurface] of displaySurfaces.entries()) {
-            renderer.setRenderTarget(displaySurfaceTargets[index]);
-            renderer.setClearColor(0x404040);
-            renderer.clear();
-
-            // Render for left eye
-            gl.colorMask(1, 0, 0, 0);
-            const leftEye = xrCamera.cameras[0];
-            renderer.render(scene, leftEye);
-
-            // Render for right eye
-            gl.colorMask(0, 1, 1, 0);
-            const rightEye = xrCamera.cameras[1];
-            renderer.clearDepth();
-            renderer.render(scene, rightEye);
-
-            // Reset color mask
-            gl.colorMask(1, 1, 1, 0);
-        }
-        renderer.setRenderTarget(null);
-    } else {
-        // Non-VR rendering
-        for (let [index, displaySurface] of displaySurfaces.entries()) {
-            renderer.setRenderTarget(displaySurfaceTargets[index]);
-            renderer.setClearColor(0x404040);
-            renderer.clear();
-
-            // Simulate left and right eye projections
-            const leftEye = getLeftEyePosition();
-            const rightEye = getRightEyePosition();
-
-            renderer.render(scene, cameraFromViewProj(
-                displaySurface.viewMatrix(leftEye),
-                displaySurface.projectionMatrix(leftEye, 1, 10000),
-                camera
-            ));
-
-            renderer.clearDepth();
-
-            renderer.render(scene, cameraFromViewProj(
-                displaySurface.viewMatrix(rightEye),
-                displaySurface.projectionMatrix(rightEye, 1, 10000),
-                camera
-            ));
-        }
-    }
+    var animate = function () {
+	   const xrCamera = renderer.xr.getCamera(camera);
+	    const isVR = renderer.xr.isPresenting;
+	    // Check if the session exists
+	    const session = renderer.xr.getSession();
+	    if (session) {
+	        const referenceSpace = renderer.xr.getReferenceSpace();
+	        // Request the current XRFrame
+	        const frame = renderer.xr.getFrame(); // Manually fetch the frame
+	        if (frame) {
+	            const pose = frame.getViewerPose(referenceSpace);
+	            if (pose) {
+	                
+	                const position = pose.transform.position;
+	                const orientation = pose.transform.orientation;
+	                // Update the VR camera with position and orientation
+	                xrCamera.position.set(position.x, position.y, position.z);
+	                xrCamera.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
+	            }
+		}
+	    }
+	    var gl = renderer.getContext();
+	    renderer.setAnimationLoop(animate);
+	    // Rotate the cube (or other scene updates)
+	    const cube = scene.getObjectByName("Cube");
+	    if (cube) {
+	        cube.rotation.x += 0.01;
+	        cube.rotation.y += 0.01;
+	}
+	// Clear and render logic
+	renderer.setClearColor(0x808080);
+	renderer.clear();
+	renderer.render(displaySurfaceScene, camera);
+	// 2. render scene objects onto a texture, for each target
+	if(!isVR){
+	for (let [index, displaySurface] of displaySurfaces.entries()) 
+	    {
+		renderer.setRenderTarget(displaySurfaceTargets[index]);
+		renderer.setClearColor(0x404040); // Background color for surface texture
+		renderer.clear();
+		// Simulate left eye (red tint)
+		gl.colorMask(1, 0, 0, 0); // Red channel only
+		var eye = (xrCamera.position.x,xrCamera.position.y,xrCamera.position.z);
+		var view = displaySurface.viewMatrix(eye);
+		var proj = displaySurface.projectionMatrix(eye, 1, 10000);
+		lcam = cameraFromViewProj(view, proj, xrCamera.cameras[0].clone());
+		renderer.render(scene, lcam);
+		//Simulate right eye (blue-green tint)
+		gl.colorMask(0, 1, 1, 0); // Blue and green channels only
+		var eye = (xrCamera.position.x,xrCamera.position.y,xrCamera.position.z);
+		var view = displaySurface.viewMatrix(eye);
+		var proj = displaySurface.projectionMatrix(eye, 1, 10000);
+		rcam = cameraFromViewProj(view, proj, xrCamera.cameras[1].clone());
+		renderer.clearDepth(); // Clear depth buffer for second pass
+		renderer.render(scene, rcam);
+		// Reset color mask to default
+		gl.colorMask(1, 1, 1, 0);
+		}
+	    }
+	else {
+	    // Render the scene onto each display surface target with dual projections (red/blue)
+	    for (let [index, displaySurface] of displaySurfaces.entries()) 
+	    {
+	        renderer.setRenderTarget(displaySurfaceTargets[index]);
+	        renderer.setClearColor(0x404040); // Background color for surface texture
+	        renderer.clear();
+	        // Simulate left eye (red tint)
+	        gl.colorMask(1, 0, 0, 0); // Red channel only
+		var eye = getLeftEyePosition();
+            	var view = displaySurface.viewMatrix(eye);
+            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
+            	var leftCamera = cameraFromViewProj(view, proj, camera.clone());
+	        renderer.render(scene, leftCamera);
+	        // Simulate right eye (blue-green tint)
+	        gl.colorMask(0, 1, 1, 0); // Blue and green channels only
+	        var eye = getRightEyePosition();
+            	var view = displaySurface.viewMatrix(eye);
+            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
+            	var rightCamera = cameraFromViewProj(view, proj, camera.clone());
+	        renderer.clearDepth(); // Clear depth buffer for second pass
+	        renderer.render(scene, rightCamera);
+	        // Reset color mask to default
+	        gl.colorMask(1, 1, 1, 0);
+	    }
+	}
+	    renderer.setRenderTarget(null);
+	    renderer.setClearColor(0x000000);
+   // 3. render display surfaces as (textured) quads
+   //renderer.render(displaySurfaceScene, camera);
+   // 4. render eyes
+   renderer.render(eyeScene, camera);
+    };
 
     // Render the main scene
     renderer.render(scene, camera);
