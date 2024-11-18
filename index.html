@@ -396,6 +396,7 @@
     var animate = function () {
         var Sesion = renderer.xr.getSession();
 	getHeadsetPosition();
+	const isVR = renderer.xr.isPresenting;
         var gl = renderer.getContext();
         renderer.setAnimationLoop(animate);
 	const xrCamera = renderer.xr.getCamera(camera);//VR camera init
@@ -414,34 +415,38 @@
         
         renderer.render(displaySurfaceScene, camera);
         // 2. render scene objects onto a texture, for each target
-        for (let [index, displaySurface] of displaySurfaces.entries())
-        {
-            renderer.setRenderTarget(displaySurfaceTargets[index]);
-            renderer.setClearColor(0x404040);
-            renderer.clear();
-
-            // Render for left eye
-            gl.colorMask(1, 0, 0, 0); 
-            var eyeL = getLeftEyePosition();
-            var viewL = displaySurface.viewMatrix(eyeL);
-            var projL = displaySurface.projectionMatrix(eyeL, xrCamera.near, xrCamera.far);
-            var leftCamera = cameraFromViewProj(viewL, projL);
-            renderer.render(scene, leftCamera); 
-
-            // Render for right eye
-            gl.colorMask(0, 1, 1, 0);
-            var eyeR = getRightEyePosition();
-            var viewR = displaySurface.viewMatrix(eyeR);
-            var projR = displaySurface.projectionMatrix(eyeR, xrCamera.near, xrCamera.far);
-            var rightCamera = cameraFromViewProj(viewR, projR);
-            renderer.clearDepth();
-            renderer.render(scene, rightCamera);
-            
-            gl.colorMask(1, 1, 1, 0);
-        }
-        // restore state
-        renderer.setRenderTarget(null);
-        renderer.setClearColor(0x000000);
+	if(isVR){
+	        for (let [index, displaySurface] of displaySurfaces.entries())
+	        {
+	            renderer.setRenderTarget(displaySurfaceTargets[index]);
+	            renderer.setClearColor(0x404040);
+	            renderer.clear();
+	
+	            // Render for left eye
+	            gl.colorMask(1, 0, 0, 0); 
+	            var eyeL = getLeftEyePosition();
+	            var viewL = displaySurface.viewMatrix(eyeL);
+	            var projL = displaySurface.projectionMatrix(eyeL, xrCamera.near, xrCamera.far);
+	            var leftCamera = cameraFromViewProj(viewL, projL);
+	            renderer.render(scene, leftCamera); 
+	
+	            // Render for right eye
+	            gl.colorMask(0, 1, 1, 0);
+	            var eyeR = getRightEyePosition();
+	            var viewR = displaySurface.viewMatrix(eyeR);
+	            var projR = displaySurface.projectionMatrix(eyeR, xrCamera.near, xrCamera.far);
+	            var rightCamera = cameraFromViewProj(viewR, projR);
+	            renderer.clearDepth();
+	            renderer.render(scene, rightCamera);
+	            
+	            gl.colorMask(1, 1, 1, 0);
+	        }
+	}
+	else{	
+	        // restore state
+	        renderer.setRenderTarget(null);
+	        renderer.setClearColor(0x000000);
+	}
     
         // 3. render display surfaces as (textured) quads
         //renderer.render(displaySurfaceScene, camera);
