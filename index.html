@@ -437,14 +437,14 @@
 		var eye = (xrCamera.position.x,xrCamera.position.y,xrCamera.position.z);
 		var view = displaySurface.viewMatrix(eye);
 		var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-		lcam = cameraFromViewProj(view, proj, xrCamera.cameras[0].clone());
+		var lcam = cameraFromViewProj(view, proj, xrCamera.cameras[0].clone());
 		renderer.render(scene, lcam);
 		//Simulate right eye (blue-green tint)
 		gl.colorMask(0, 1, 1, 0); // Blue and green channels only
 		var eye = (xrCamera.position.x,xrCamera.position.y,xrCamera.position.z);
 		var view = displaySurface.viewMatrix(eye);
 		var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-		rcam = cameraFromViewProj(view, proj, xrCamera.cameras[1].clone());
+		var rcam = cameraFromViewProj(view, proj, xrCamera.cameras[1].clone());
 		renderer.clearDepth(); // Clear depth buffer for second pass
 		renderer.render(scene, rcam);
 		// Reset color mask to default
