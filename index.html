@@ -408,6 +408,7 @@
 		console.log(position);
 		xrCamera.position.set(position.x, position.y, position.z);
 		xrCamera.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
+		console.log(xrCamera);
 	    }
 	    var gl = renderer.getContext();
 	    renderer.setAnimationLoop(animate);
