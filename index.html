@@ -416,12 +416,12 @@
 	if(isVR){
 		for (let [index, displaySurface] of displaySurfaces.entries()) 
 		    {
-			renderer.setRenderTarget(displaySurfaceTargets[index]);
+			renderer.xr.setRenderTarget(displaySurfaceTargets[index]);
 			renderer.setClearColor(0x404040); // Background color for surface texture
 			renderer.clear();
 			// Simulate left eye (red tint)
 			gl.colorMask(1, 0, 0, 0); // Red channel only
-			var eye = (xrCamera.position.x,xrCamera.position.y,xrCamera.position.z);
+			var eye = (xrCamera.cameras[0].position.x,xrCamera.cameras[0].position.y,xrCamera.cameras[0].position.z);
 			var view = displaySurface.viewMatrix(eye);
 			var proj = displaySurface.projectionMatrix(eye, 1, 10000);
 			lcam = cameraFromViewProj(view, proj, xrCamera.cameras[0].clone());
@@ -429,7 +429,7 @@
 	
 			//Simulate right eye (blue-green tint)
 			gl.colorMask(0, 1, 1, 0); // Blue and green channels only
-			var eye = (xrCamera.position.x,xrCamera.position.y,xrCamera.position.z);
+			var eye = (xrCamera.cameras[1].position.x,xrCamera.cameras[1].position.y,xrCamera.cameras[1].position.z);
 			var view = displaySurface.viewMatrix(eye);
 			var proj = displaySurface.projectionMatrix(eye, 1, 10000);
 			rcam = cameraFromViewProj(view, proj, xrCamera.cameras[1].clone());
