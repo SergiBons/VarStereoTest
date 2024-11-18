@@ -412,7 +412,8 @@
             }
 	}
     }
-
+	var gl = renderer.getContext();
+        renderer.setAnimationLoop(animate);
 	
 	    // Rotate the cube (or other scene updates)
 	    const cube = scene.getObjectByName("Cube");
