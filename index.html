@@ -462,8 +462,6 @@
 	
 		}
 	    // Restore state for main screen rendering
-	    renderer.setRenderTarget(null);
-	    renderer.setClearColor(0x000000);
 	    }
 	else {
 	    // Render the scene onto each display surface target with dual projections (red/blue)
@@ -497,18 +495,19 @@
 	    }
 
 	}
+
+	    
+	    renderer.setRenderTarget(null);
+	    renderer.setClearColor(0x000000);
    // 3. render display surfaces as (textured) quads
    //renderer.render(displaySurfaceScene, camera);
 	
    // 4. render eyes
-   //renderer.render(eyeScene, camera);
+   renderer.render(eyeScene, camera);
 
 	
 
 	
-    // Restore state for main screen rendering
-    renderer.setRenderTarget(null);
-    renderer.setClearColor(0x000000);
 
     };
 
