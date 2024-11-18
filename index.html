@@ -481,19 +481,20 @@
 		
 
 	    }
-	    	// 3. render display surfaces as (textured) quads
-	        renderer.render(displaySurfaceScene, camera);
-	        
-	        // 4. render eyes
-	        renderer.render(eyeScene, camera);
 
-	        
-
-		
-	    // Restore state for main screen rendering
-	    renderer.setRenderTarget(null);
-	    renderer.setClearColor(0x000000);
 	}
+		// 3. render display surfaces as (textured) quads
+   renderer.render(displaySurfaceScene, camera);
+	
+	// 4. render eyes
+   renderer.render(eyeScene, camera);
+
+	
+
+	
+    // Restore state for main screen rendering
+    renderer.setRenderTarget(null);
+    renderer.setClearColor(0x000000);
 
     };
 
