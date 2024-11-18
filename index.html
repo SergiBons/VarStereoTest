@@ -473,13 +473,15 @@
 	
 	        // Reset color mask to default
 	        gl.colorMask(1, 1, 1, 0);
-	    }
-	    
-	        // 3. render display surfaces as (textured) quads
+		
+		// 3. render display surfaces as (textured) quads
 	        renderer.render(displaySurfaceScene, camera);
 	        
 	        // 4. render eyes
 	        renderer.render(eyeScene, camera);
+	    }
+	    
+
 	        
 
 		
