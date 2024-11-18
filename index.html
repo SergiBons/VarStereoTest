@@ -442,18 +442,48 @@
 	            gl.colorMask(1, 1, 1, 0);
 	        }
 	}
-	else{	
-	        // restore state
-	        renderer.setRenderTarget(null);
-	        renderer.setClearColor(0x000000);
+
+	else {
+	    // Render the scene onto each display surface target with dual projections (red/blue)
+	    for (let [index, displaySurface] of displaySurfaces.entries()) {
+	        renderer.setRenderTarget(displaySurfaceTargets[index]);
+	        renderer.setClearColor(0x404040); // Background color for surface texture
+	        renderer.clear();
+	
+	        // Simulate left eye (red tint)
+	        gl.colorMask(1, 0, 0, 0); // Red channel only
+	        const eyeL = camera.position.clone().add(new THREE.Vector3(-0.03, 0, 0)); // Slight offset for "left eye"
+	        const viewL = displaySurface.viewMatrix(eyeL);
+	        const projL = displaySurface.projectionMatrix(eyeL, camera.near, camera.far);
+	        const leftCamera = cameraFromViewProj(viewL, projL);
+	        renderer.render(scene, leftCamera);
+	
+	        // Simulate right eye (blue-green tint)
+	        gl.colorMask(0, 1, 1, 0); // Blue and green channels only
+	        const eyeR = camera.position.clone().add(new THREE.Vector3(0.03, 0, 0)); // Slight offset for "right eye"
+	        const viewR = displaySurface.viewMatrix(eyeR);
+	        const projR = displaySurface.projectionMatrix(eyeR, camera.near, camera.far);
+	        const rightCamera = cameraFromViewProj(viewR, projR);
+	        renderer.clearDepth(); // Clear depth buffer for second pass
+	        renderer.render(scene, rightCamera);
+	
+	        // Reset color mask to default
+	        gl.colorMask(1, 1, 1, 0);
+	    }
+	    
+	        // 3. render display surfaces as (textured) quads
+	        //renderer.render(displaySurfaceScene, camera);
+	        
+	        // 4. render eyes
+	       // renderer.render(eyeScene, camera);
+	        
+
+		
+	    // Restore state for main screen rendering
+	    renderer.setRenderTarget(null);
+	    renderer.setClearColor(0x000000);
 	}
-    
-        // 3. render display surfaces as (textured) quads
-        renderer.render(displaySurfaceScene, camera);
-        
-        // 4. render eyes
-        renderer.render(eyeScene, camera);
-        
+
     };
 
     window.addEventListener( 'keydown', function ( event ) 
