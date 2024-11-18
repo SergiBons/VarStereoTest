@@ -393,7 +393,7 @@
 
     // refresh function
     var animate = function () {
-	    const xrCamera = renderer.xr.getCamera(camera);
+	    var xrCamera = renderer.xr.getCamera(camera);
 	    const isVR = renderer.xr.isPresenting;
 	    // Check if the session exists
 	    const session = renderer.xr.getSession();
