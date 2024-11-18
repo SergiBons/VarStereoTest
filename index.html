@@ -415,36 +415,41 @@
         
         renderer.render(displaySurfaceScene, camera);
         // 2. render scene objects onto a texture, for each target
-	console.log(isVR);
-	debugger;
 	if(isVR){
-		
-	        /*for (let [index, displaySurface] of displaySurfaces.entries())
-	        {
-	            renderer.setRenderTarget(displaySurfaceTargets[index]);
-	            renderer.setClearColor(0x404040);
-	            renderer.clear();
-	
-	            // Render for left eye
-	            gl.colorMask(1, 0, 0, 0); 
-	            var eyeL = getLeftEyePosition();
-	            var viewL = displaySurface.viewMatrix(eyeL);
-	            var projL = displaySurface.projectionMatrix(eyeL, xrCamera.near, xrCamera.far);
-	            var leftCamera = cameraFromViewProj(viewL, projL);
-	            renderer.render(scene, leftCamera); 
-	
-	            // Render for right eye
-	            gl.colorMask(0, 1, 1, 0);
-	            var eyeR = getRightEyePosition();
-	            var viewR = displaySurface.viewMatrix(eyeR);
-	            var projR = displaySurface.projectionMatrix(eyeR, xrCamera.near, xrCamera.far);
-	            var rightCamera = cameraFromViewProj(viewR, projR);
-	            renderer.clearDepth();
-	            renderer.render(scene, rightCamera);
-	            
-	            gl.colorMask(1, 1, 1, 0);
-	        }*/
-	}
+		const xrCamera = renderer.xr.getCamera(camera);
+		for (let [index, displaySurface] of displaySurfaces.entries()) 
+			    {
+			        renderer.setRenderTarget(displaySurfaceTargets[index]);
+			        renderer.setClearColor(0x404040); // Background color for surface texture
+			        renderer.clear();
+			
+			        // Simulate left eye (red tint)
+			        gl.colorMask(1, 0, 0, 0); // Red channel only
+				var eye = xrCamera.cameras[0];
+		            	var view = displaySurface.viewMatrix(eye);
+		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
+		            	var leftCamera = cameraFromViewProj(view, proj);
+			        renderer.render(scene, leftCamera);
+			
+			        // Simulate right eye (blue-green tint)
+			        gl.colorMask(0, 1, 1, 0); // Blue and green channels only
+			        var eye = xrCamera.cameras[1];
+		            	var view = displaySurface.viewMatrix(eye);
+		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
+		            	var rightCamera = cameraFromViewProj(view, proj);
+			        renderer.clearDepth(); // Clear depth buffer for second pass
+			        renderer.render(scene, rightCamera);
+			
+			        // Reset color mask to default
+			        gl.colorMask(1, 1, 1, 0);
+				
+				// 3. render display surfaces as (textured) quads
+			        renderer.render(displaySurfaceScene, camera);
+			        
+			        // 4. render eyes
+			        renderer.render(eyeScene, camera);
+			    }
+			}
 
 	else {
 	    // Render the scene onto each display surface target with dual projections (red/blue)
@@ -474,13 +479,13 @@
 	        // Reset color mask to default
 	        gl.colorMask(1, 1, 1, 0);
 		
-		// 3. render display surfaces as (textured) quads
+
+	    }
+	    	// 3. render display surfaces as (textured) quads
 	        renderer.render(displaySurfaceScene, camera);
 	        
 	        // 4. render eyes
 	        renderer.render(eyeScene, camera);
-	    }
-	    
 
 	        
 
