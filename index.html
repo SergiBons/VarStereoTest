@@ -411,13 +411,13 @@
 		renderer.render(scene, camera);
 	renderer.render(displaySurfaceScene, camera);
 	// 2. render scene objects onto a texture, for each target
-	if(!isVR){
+	if(isVR){
 	const referenceSpace = renderer.xr.getReferenceSpace();
 	// Request the current XRFrame
 	const frame = renderer.xr.getFrame(); // Manually fetch the frame
-	//const pose = frame.getViewerPose(referenceSpace);
-	//const position = pose.transform.position;
-	//const orientation = pose.transform.orientation;
+	const pose = frame.getViewerPose(referenceSpace);
+	const position = pose.transform.position;
+	const orientation = pose.transform.orientation;
 	// Update the VR camera with position and orientation
 	console.log(position);
 	xrCamera.position.set(position.x, position.y, position.z);
