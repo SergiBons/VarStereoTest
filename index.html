@@ -62,7 +62,8 @@
             mat = mat.lookAt(eye, target, upVector); // this lookAt version creates only a rotation matrix
             var translate = new THREE.Matrix4().makeTranslation(-eye.x, -eye.y, -eye.z);
             mat = mat.multiplyMatrices(mat, translate);
-        
+            console.log(mat);
+	    debugger;
             return mat;
         }
             
