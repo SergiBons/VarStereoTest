@@ -424,7 +424,7 @@
 			var eye = (xrCamera.position.x,xrCamera.position.y,xrCamera.position.z);
 			var view = displaySurface.viewMatrix(eye);
 			var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-			xrCamera.cameras[0] = cameraFromViewProj(view, proj, xrCamera.cameras[0]);
+			xrCamera.cameras[0] = cameraFromViewProj(view, proj, xrCamera.cameras[0].clone());
 			renderer.render(scene, xrCamera.cameras[0]);
 	
 			//Simulate right eye (blue-green tint)
@@ -432,7 +432,7 @@
 			var eye = (xrCamera.position.x,xrCamera.position.y,xrCamera.position.z);
 			var view = displaySurface.viewMatrix(eye);
 			var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-			xrCamera.cameras[1] = cameraFromViewProj(view, proj, xrCamera.cameras[1]);
+			xrCamera.cameras[1] = cameraFromViewProj(view, proj, xrCamera.cameras[1].clone());
 			renderer.clearDepth(); // Clear depth buffer for second pass
 			renderer.render(scene, xrCamera.cameras[1]);
 		
