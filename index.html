@@ -416,7 +416,7 @@
         renderer.render(displaySurfaceScene, camera);
         // 2. render scene objects onto a texture, for each target
 	if(isVR){
-	        for (let [index, displaySurface] of displaySurfaces.entries())
+	        /*for (let [index, displaySurface] of displaySurfaces.entries())
 	        {
 	            renderer.setRenderTarget(displaySurfaceTargets[index]);
 	            renderer.setClearColor(0x404040);
@@ -440,12 +440,13 @@
 	            renderer.render(scene, rightCamera);
 	            
 	            gl.colorMask(1, 1, 1, 0);
-	        }
+	        }*/
 	}
 
 	else {
 	    // Render the scene onto each display surface target with dual projections (red/blue)
-	    for (let [index, displaySurface] of displaySurfaces.entries()) {
+	    for (let [index, displaySurface] of displaySurfaces.entries()) 
+	    {
 	        renderer.setRenderTarget(displaySurfaceTargets[index]);
 	        renderer.setClearColor(0x404040); // Background color for surface texture
 	        renderer.clear();
