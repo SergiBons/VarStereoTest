@@ -502,13 +502,21 @@
     }
 
     function getLeftEyePosition() {
-    const xrCamera = renderer.xr.getCamera(camera);
-    return xrCamera.cameras[0].position.clone(); // Left eye
+        if (renderer.xr.isPresenting) {
+            const xrCamera = renderer.xr.getCamera(camera);
+            return xrCamera.cameras[0].position.clone(); // Left eye
+	} else {
+	    return camera.position.clone(); // Fallback to monoscopic
+        }
     }
-
+	
     function getRightEyePosition() {
-    const xrCamera = renderer.xr.getCamera(camera);
-    return xrCamera.cameras[1].position.clone(); // Right eye
+        if (renderer.xr.isPresenting) {
+            const xrCamera = renderer.xr.getCamera(camera);
+            return xrCamera.cameras[1].position.clone(); // Right eye
+        } else {
+            return camera.position.clone(); // Fallback to monoscopic
+        }
     }
 
 
