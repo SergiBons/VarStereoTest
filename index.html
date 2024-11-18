@@ -136,6 +136,7 @@
     var orbitControl;
     var showScene = true;
 
+
     function addDragControlToObjects()
     {
         var objects = [];
@@ -392,7 +393,8 @@
 
     // refresh function
     var animate = function () {
-        getHeadsetPosition();
+        var Sesion = renderer.xr.getSession();
+	getHeadsetPosition();
         var gl = renderer.getContext();
         renderer.setAnimationLoop(animate);
         //Rotating Cube
@@ -408,6 +410,7 @@
         if (showScene)
             renderer.render(scene, camera);
         
+        renderer.render(displaySurfaceScene, camera);
         // 2. render scene objects onto a texture, for each target
         for (let [index, displaySurface] of displaySurfaces.entries())
         {
@@ -439,10 +442,10 @@
         renderer.setClearColor(0x000000);
     
         // 3. render display surfaces as (textured) quads
-        renderer.render(displaySurfaceScene, camera);
+        //renderer.render(displaySurfaceScene, camera);
         
         // 4. render eyes
-        renderer.render(eyeScene, camera);
+        //renderer.render(eyeScene, camera);
         
     };
 
@@ -468,9 +471,9 @@
                     var viewL = displaySurfaces[1].viewMatrix(new THREE.Vector3(50,20,100));
                     //var viewR = displaySurfaces[2].viewMatrix(new THREE.Vector3(50,20,100));
                     //var viewB = displaySurfaces[3].viewMatrix(new THREE.Vector3(50,20,100));
-                    console.log("View matrices:");
-                    console.log(viewF);
-                    console.log(viewL);
+                    //console.log("View matrices:");
+                    //console.log(viewF);
+                    //console.log(viewL);
                     //console.log(viewR);
                     //console.log(viewB);
                     break;
@@ -487,7 +490,7 @@
 
             headsetPosition.set(xrCamera.position.x, xrCamera.position.y, xrCamera.position.z);
 
-            console.log("Headset Position: ", headsetPosition);
+            //console.log("Headset Position: ", headsetPosition);
         }
     }
 
