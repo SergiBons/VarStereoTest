@@ -395,9 +395,7 @@
     var animate = function () {
 	    var xrCamera = renderer.xr.getCamera(camera);
 	    const isVR = renderer.xr.isPresenting;
-	    // Check if the session exists
-	    const session = renderer.xr.getSession();
-	    if (session) {
+	    if (isVR) {
 	        const referenceSpace = renderer.xr.getReferenceSpace();
 	        // Request the current XRFrame
 	        const frame = renderer.xr.getFrame(); // Manually fetch the frame
