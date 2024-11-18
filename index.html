@@ -392,30 +392,26 @@
     }
 
     // refresh function
-    var animate = function () {
+   var animate = function () {
 	    const isVR = renderer.xr.isPresenting;
-
 	    // Check if the session exists
 	    const session = renderer.xr.getSession();
-	    if (session) {
-	        const referenceSpace = renderer.xr.getReferenceSpace();
-	
-	        // Request the current XRFrame
-	        const frame = renderer.xr.getFrame(); // Manually fetch the frame
-	        if (frame) {
-	            const pose = frame.getViewerPose(referenceSpace);
-	
-	            if (pose) {
-	                const xrCamera = renderer.xr.getCamera(camera);
-	                const position = pose.transform.position;
-	                const orientation = pose.transform.orientation;
-	
-	                // Update the VR camera with position and orientation
-	                xrCamera.position.set(position.x, position.y, position.z);
-	                xrCamera.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
-	            }
-	        }
-	    }
+	    const session = renderer.xr.getSession();
+    if (session) {
+        const referenceSpace = renderer.xr.getReferenceSpace();
+        // Request the current XRFrame
+        const frame = renderer.xr.getFrame(); // Manually fetch the frame
+        if (frame) {
+            const pose = frame.getViewerPose(referenceSpace);
+            if (pose) {
+                const xrCamera = renderer.xr.getCamera(camera);
+                const position = pose.transform.position;
+                const orientation = pose.transform.orientation;
+                // Update the VR camera with position and orientation
+                xrCamera.position.set(position.x, position.y, position.z);
+                xrCamera.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
+            }
+
 	
 	    // Rotate the cube (or other scene updates)
 	    const cube = scene.getObjectByName("Cube");
