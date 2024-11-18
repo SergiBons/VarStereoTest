@@ -414,7 +414,7 @@
         renderer.render(displaySurfaceScene, camera);
         // 2. render scene objects onto a texture, for each target
 	if(isVR){
-		const xrCamera = renderer.xr.getCamera(camera);
+		var xrCamera = renderer.xr.getCamera(camera);
 		for (let [index, displaySurface] of displaySurfaces.entries()) 
 			    {
 			        renderer.setRenderTarget(displaySurfaceTargets[index]);
@@ -425,7 +425,7 @@
 				var eye = getLeftEyePosition();
 		            	var view = displaySurface.viewMatrix(eye);
 		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-		            	var leftCamera = cameraFromViewProj(view, proj, xrCamera.cameras[0]);
+		            	var leftCamera = cameraFromViewProj(view, proj, xrCamera.cameras[0].clone());
 			        renderer.render(scene, leftCamera);
 
 			        //Simulate right eye (blue-green tint)
@@ -433,7 +433,7 @@
 			        var eye = getRightEyePosition();
 		            	var view = displaySurface.viewMatrix(eye);
 		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-		            	var rightCamera = cameraFromViewProj(view, proj, xrCamera.cameras[1]);
+		            	var rightCamera = cameraFromViewProj(view, proj, xrCamera.cameras[1].clone());
 			        renderer.clearDepth(); // Clear depth buffer for second pass
 			        renderer.render(scene, rightCamera);
 			
@@ -459,7 +459,7 @@
 		var eye = getLeftEyePosition();
             	var view = displaySurface.viewMatrix(eye);
             	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-            	var leftCamera = cameraFromViewProj(view, proj, camera);
+            	var leftCamera = cameraFromViewProj(view, proj, camera.clone());
 	        renderer.render(scene, leftCamera);
 	
 	        // Simulate right eye (blue-green tint)
@@ -467,7 +467,7 @@
 	        var eye = getRightEyePosition();
             	var view = displaySurface.viewMatrix(eye);
             	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-            	var rightCamera = cameraFromViewProj(view, proj, camera);
+            	var rightCamera = cameraFromViewProj(view, proj, camera.clone());
 	        renderer.clearDepth(); // Clear depth buffer for second pass
 	        renderer.render(scene, rightCamera);
 	
