@@ -424,19 +424,22 @@
 				getHeadsetPosition();
 			        // Simulate left eye (red tint)
 			        gl.colorMask(1, 0, 0, 0); // Red channel only
-				var eye = xrCamera.cameras[0];
+				var eye = getLeftEyePosition();
 		            	var view = displaySurface.viewMatrix(eye);
 		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
 		            	var leftCamera = cameraFromViewProj(view, proj);
+				xrCamera.cameras[0] = leftCamera;
 			        renderer.render(scene, leftCamera);
-			
+
+				getHeadsetPosition();
 			        //Simulate right eye (blue-green tint)
 			        gl.colorMask(0, 1, 1, 0); // Blue and green channels only
-			        var eye = xrCamera.cameras[1];
+			        var eye = getRightEyePosition();
 		            	var view = displaySurface.viewMatrix(eye);
 		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
 		            	var rightCamera = cameraFromViewProj(view, proj);
 			        renderer.clearDepth(); // Clear depth buffer for second pass
+				xrCamera.cameras[0] = RightCamera;
 			        renderer.render(scene, rightCamera);
 			
 			        // Reset color mask to default
@@ -532,7 +535,7 @@
 
     function getHeadsetPosition() {
         if (renderer.xr.isPresenting) {
-            const xrCamera = renderer.xr.getCamera(camera);
+            const xrCamera = renderer.xr.getCamera(cam);
 
             headsetPosition.set(xrCamera.position.x, xrCamera.position.y, xrCamera.position.z);
 
