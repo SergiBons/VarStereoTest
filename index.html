@@ -430,7 +430,7 @@
 		            	var leftCamera = cameraFromViewProj(view, proj);
 			        renderer.render(scene, leftCamera);
 			
-			        Simulate right eye (blue-green tint)
+			        //Simulate right eye (blue-green tint)
 			        gl.colorMask(0, 1, 1, 0); // Blue and green channels only
 			        var eye = xrCamera.cameras[1];
 		            	var view = displaySurface.viewMatrix(eye);
