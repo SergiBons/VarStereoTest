@@ -393,7 +393,7 @@
 
     // refresh function
     var animate = function () {
-        var Sesion = renderer.xr.getSession();
+        var session = renderer.xr.getSession();
 	if (session) {
 	        const referenceSpace = renderer.xr.getReferenceSpace();
 	        const frame = session.requestAnimationFrame;
