@@ -393,6 +393,8 @@
 
     // refresh function
     var animate = function () {
+	const isVR = renderer.xr.isPresenting;
+	const xrCamera = renderer.xr.getCamera(camera);//VR camera init
         var session = renderer.xr.getSession();
 	if (session) {
 	        const referenceSpace = renderer.xr.getReferenceSpace();
@@ -412,10 +414,10 @@
 	            xrCamera.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
 	        }
 	}
-	const isVR = renderer.xr.isPresenting;
+	
         var gl = renderer.getContext();
         renderer.setAnimationLoop(animate);
-	const xrCamera = renderer.xr.getCamera(camera);//VR camera init
+	
         //Rotating Cube
         var cube = scene.getObjectByName("Cube");
         if (cube) {
