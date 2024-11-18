@@ -411,7 +411,7 @@
 		renderer.render(scene, camera);
 	renderer.render(displaySurfaceScene, camera);
 	// 2. render scene objects onto a texture, for each target
-	if(isVR){
+	if(!isVR){
 	const referenceSpace = renderer.xr.getReferenceSpace();
 	// Request the current XRFrame
 	const frame = renderer.xr.getFrame(); // Manually fetch the frame
