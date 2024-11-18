@@ -394,6 +394,23 @@
     // refresh function
     var animate = function () {
         var Sesion = renderer.xr.getSession();
+	if (session) {
+        const referenceSpace = renderer.xr.getReferenceSpace();
+        const frame = session.requestAnimationFrame;
+
+        const pose = frame.getViewerPose(referenceSpace);
+        if (pose) {
+            const position = pose.transform.position;
+            const orientation = pose.transform.orientation;
+
+            // Log headset position and orientation
+            console.log('Headset Position:', position);
+            console.log('Headset Orientation:', orientation);
+
+            // Apply the headset's position and orientation to the Three.js camera
+            xrCamera.position.set(position.x, position.y, position.z);
+            xrCamera.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
+        }
 	const isVR = renderer.xr.isPresenting;
         var gl = renderer.getContext();
         renderer.setAnimationLoop(animate);
@@ -414,6 +431,27 @@
         renderer.render(displaySurfaceScene, camera);
         // 2. render scene objects onto a texture, for each target
 	if(isVR){
+		const xrSession = await navigator.xr.requestSession('immersive-vr');
+
+		// Create an XRReferenceSpace
+		const referenceSpace = await xrSession.requestReferenceSpace('local');
+		 const pose = frame.getViewerPose(referenceSpace);
+	
+		    if (pose) {
+			// Accessing the headset's position and rotation (from pose)
+			const position = pose.transform.position;  // Position of the headset in 3D space
+			const orientation = pose.transform.orientation; // Quaternion representing the headset's rotation
+		
+			console.log('Headset Position:', position);
+			console.log('Headset Orientation (Quaternion):', orientation);
+		
+			// Update the camera or object in your Three.js scene based on the headset's position and rotation
+			camera.position.set(position.x, position.y, position.z);
+			camera.rotation.setFromQuaternion(orientation);
+		
+			// Continue rendering the scene...
+			renderer.render(scene, camera);
+		    }
 		for (let [index, displaySurface] of displaySurfaces.entries()) 
 		    {
 			renderer.setRenderTarget(displaySurfaceTargets[index]);
