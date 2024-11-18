@@ -416,7 +416,7 @@
 	if(!isVR){
 		for (let [index, displaySurface] of displaySurfaces.entries()) 
 		    {
-			renderer.xr.setRenderTarget(displaySurfaceTargets[index]);
+			renderer.setRenderTarget(displaySurfaceTargets[index]);
 			renderer.setClearColor(0x404040); // Background color for surface texture
 			renderer.clear();
 			// Simulate left eye (red tint)
