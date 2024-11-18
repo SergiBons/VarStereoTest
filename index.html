@@ -453,7 +453,7 @@
 	        // Simulate left eye (red tint)
 	        gl.colorMask(1, 0, 0, 0); // Red channel only
 		var eye = getLeftEyePosition();
-            	var view = displaySurface.viewMatrix(eyeL);
+            	var view = displaySurface.viewMatrix(eye);
             	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
             	var leftCamera = cameraFromViewProj(view, proj);
 	        renderer.render(scene, leftCamera);
@@ -461,7 +461,7 @@
 	        // Simulate right eye (blue-green tint)
 	        gl.colorMask(0, 1, 1, 0); // Blue and green channels only
 	        var eye = getRightEyePosition();
-            	var view = displaySurface.viewMatrix(eyeR);
+            	var view = displaySurface.viewMatrix(eye);
             	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
             	var rightCamera = cameraFromViewProj(view, proj);
 	        renderer.clearDepth(); // Clear depth buffer for second pass
