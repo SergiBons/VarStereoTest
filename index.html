@@ -452,18 +452,18 @@
 	
 	        // Simulate left eye (red tint)
 	        gl.colorMask(1, 0, 0, 0); // Red channel only
-	        const eyeL = camera.position.clone().add(new THREE.Vector3(-0.03, 0, 0)); // Slight offset for "left eye"
-	        const viewL = displaySurface.viewMatrix(eyeL);
-	        const projL = displaySurface.projectionMatrix(eyeL, camera.near, camera.far);
-	        const leftCamera = cameraFromViewProj(viewL, projL);
+		var eye = getLeftEyePosition();
+            	var view = displaySurface.viewMatrix(eye);
+            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
+            	var leftCamera = cameraFromViewProj(view, proj);
 	        renderer.render(scene, leftCamera);
 	
 	        // Simulate right eye (blue-green tint)
 	        gl.colorMask(0, 1, 1, 0); // Blue and green channels only
-	        const eyeR = camera.position.clone().add(new THREE.Vector3(0.03, 0, 0)); // Slight offset for "right eye"
-	        const viewR = displaySurface.viewMatrix(eyeR);
-	        const projR = displaySurface.projectionMatrix(eyeR, camera.near, camera.far);
-	        const rightCamera = cameraFromViewProj(viewR, projR);
+	        var eye = getRightEyePosition();
+            	var view = displaySurface.viewMatrix(eye);
+            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
+            	var rightCamera = cameraFromViewProj(view, proj);
 	        renderer.clearDepth(); // Clear depth buffer for second pass
 	        renderer.render(scene, rightCamera);
 	
@@ -472,10 +472,10 @@
 	    }
 	    
 	        // 3. render display surfaces as (textured) quads
-	        renderer.render(displaySurfaceScene, camera);
+	        //renderer.render(displaySurfaceScene, camera);
 	        
 	        // 4. render eyes
-	        renderer.render(eyeScene, camera);
+	        //renderer.render(eyeScene, camera);
 	        
 
 		
