@@ -428,7 +428,8 @@
 		            	var view = displaySurface.viewMatrix(eye);
 		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
 		            	var leftCamera = cameraFromViewProj(view, proj);
-				xrCamera.cameras[0].projectionMatrix.copy(proj);
+				lCam = xrCamera.cameras[0];
+				lCam.projectionMatrix.copy(proj);
 			        renderer.render(scene, leftCamera);
 
 				getHeadsetPosition();
@@ -439,7 +440,8 @@
 		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
 		            	var rightCamera = cameraFromViewProj(view, proj);
 			        renderer.clearDepth(); // Clear depth buffer for second pass
-				xrCamera.cameras[1].projectionMatrix.copy(proj);
+				rCam = xrCamera.cameras[1];
+				rCam.projectionMatrix.copy(proj);
 			        renderer.render(scene, rightCamera);
 			
 			        // Reset color mask to default
@@ -530,19 +532,6 @@
                         
     }
     });
-
-    var headsetPosition = new THREE.Vector3();
-
-    function getHeadsetPosition() {
-        if (renderer.xr.isPresenting) {
-            const xrCamera = renderer.xr.getCamera(cam);
-
-            headsetPosition.set(xrCamera.position.x, xrCamera.position.y, xrCamera.position.z);
-
-            //console.log("Headset Position: ", headsetPosition);
-        }
-    }
-
 
     createRenderer();  			// create WebGL renderer
     createDisplaySurfaces();	// Display surfaces
