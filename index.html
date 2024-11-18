@@ -413,7 +413,7 @@
         
         renderer.render(displaySurfaceScene, camera);
         // 2. render scene objects onto a texture, for each target
-	if(isVR){
+	if(!isVR){
 		for (let [index, displaySurface] of displaySurfaces.entries()) 
 		    {
 			renderer.xr.setRenderTarget(displaySurfaceTargets[index]);
