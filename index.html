@@ -419,22 +419,22 @@
             renderer.setClearColor(0x404040);
             renderer.clear();
 
-            // left eye on RED channel
+            // Render for left eye
             gl.colorMask(1, 0, 0, 0); 
-            var eye = getLeftEyePosition();
-            var view = displaySurface.viewMatrix(eye);
-            var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-            var leftCamera = cameraFromViewProj(view, proj);
+            var eyeL = getLeftEyePosition();
+            var viewL = displaySurface.viewMatrix(eyeL);
+            var projL = displaySurface.projectionMatrix(eyeL, xrCamera.near, xrCamera.far);
+            var leftCamera = cameraFromViewProj(viewL, projL);
             renderer.render(scene, leftCamera); 
-        
-            // right eye on GREEN, BLUE channels
+
+            // Render for right eye
             gl.colorMask(0, 1, 1, 0);
-            var eye = getRightEyePosition();
-            var view = displaySurface.viewMatrix(eye);
-            var proj = displaySurface.projectionMatrix(eye, 1, 10000);
-            var rightCamera = cameraFromViewProj(view, proj);
+            var eyeR = getRightEyePosition();
+            var viewR = displaySurface.viewMatrix(eyeR);
+            var projR = displaySurface.projectionMatrix(eyeR, xrCamera.near, xrCamera.far);
+            var rightCamera = cameraFromViewProj(viewR, projR);
             renderer.clearDepth();
-            renderer.render(scene, rightCamera); 
+            renderer.render(scene, rightCamera);
             
             gl.colorMask(1, 1, 1, 0);
         }
