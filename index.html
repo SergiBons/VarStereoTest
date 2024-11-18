@@ -428,7 +428,7 @@
 		            	var view = displaySurface.viewMatrix(eye);
 		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
 		            	var leftCamera = cameraFromViewProj(view, proj);
-				xrCamera.cameras[0] = leftCamera;
+				xrCamera.cameras[0].projectionMatrix.copy(proj);
 			        renderer.render(scene, leftCamera);
 
 				getHeadsetPosition();
@@ -439,7 +439,7 @@
 		            	var proj = displaySurface.projectionMatrix(eye, 1, 10000);
 		            	var rightCamera = cameraFromViewProj(view, proj);
 			        renderer.clearDepth(); // Clear depth buffer for second pass
-				xrCamera.cameras[0] = RightCamera;
+				xrCamera.cameras[1].projectionMatrix.copy(proj);
 			        renderer.render(scene, rightCamera);
 			
 			        // Reset color mask to default
