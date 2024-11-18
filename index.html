@@ -393,47 +393,45 @@
 
     // refresh function
     var animate = function () {
-	const isVR = renderer.xr.isPresenting;
-	const xrCamera = renderer.xr.getCamera(camera);//VR camera init
-        var session = renderer.xr.getSession();
-	if (session) {
-	        const referenceSpace = renderer.xr.getReferenceSpace();
-	        const frame = session.requestAnimationFrame;
-	
-	        const pose = frame.getViewerPose(referenceSpace);
-	        if (pose) {
-	            const position = pose.transform.position;
-	            const orientation = pose.transform.orientation;
-	
-	            // Log headset position and orientation
-	            console.log('Headset Position:', position);
-	            console.log('Headset Orientation:', orientation);
-	
-	            // Apply the headset's position and orientation to the Three.js camera
-	            xrCamera.position.set(position.x, position.y, position.z);
-	            xrCamera.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
-	        }
-	}
-	
-        var gl = renderer.getContext();
-        renderer.setAnimationLoop(animate);
-	
-        //Rotating Cube
-        var cube = scene.getObjectByName("Cube");
-        if (cube) {
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-        }
+	    const isVR = renderer.xr.isPresenting;
 
-        // 1. render scene objects
-        renderer.setClearColor(0x808080);
-        renderer.clear();
-        if (showScene)
-            renderer.render(scene, camera);
+	    // Check if the session exists
+	    const session = renderer.xr.getSession();
+	    if (session) {
+	        const referenceSpace = renderer.xr.getReferenceSpace();
+	
+	        // Request the current XRFrame
+	        const frame = renderer.xr.getFrame(); // Manually fetch the frame
+	        if (frame) {
+	            const pose = frame.getViewerPose(referenceSpace);
+	
+	            if (pose) {
+	                const xrCamera = renderer.xr.getCamera(camera);
+	                const position = pose.transform.position;
+	                const orientation = pose.transform.orientation;
+	
+	                // Update the VR camera with position and orientation
+	                xrCamera.position.set(position.x, position.y, position.z);
+	                xrCamera.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
+	            }
+	        }
+	    }
+	
+	    // Rotate the cube (or other scene updates)
+	    const cube = scene.getObjectByName("Cube");
+	    if (cube) {
+	        cube.rotation.x += 0.01;
+	        cube.rotation.y += 0.01;
+	    }
+	
+	    // Clear and render logic
+	    renderer.setClearColor(0x808080);
+	    renderer.clear();
+
         
         renderer.render(displaySurfaceScene, camera);
-        // 2. render scene objects onto a texture, for each target
-	if(isVR){
+        	// 2. render scene objects onto a texture, for each target
+		if(isVR){
 		for (let [index, displaySurface] of displaySurfaces.entries()) 
 		    {
 			renderer.setRenderTarget(displaySurfaceTargets[index]);
