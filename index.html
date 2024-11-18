@@ -393,6 +393,7 @@
 
     // refresh function
    var animate = function () {
+	   const xrCamera = renderer.xr.getCamera(camera);
 	    const isVR = renderer.xr.isPresenting;
 	    // Check if the session exists
 	    const session = renderer.xr.getSession();
@@ -403,7 +404,7 @@
 	        if (frame) {
 	            const pose = frame.getViewerPose(referenceSpace);
 	            if (pose) {
-	                const xrCamera = renderer.xr.getCamera(camera);
+	                
 	                const position = pose.transform.position;
 	                const orientation = pose.transform.orientation;
 	                // Update the VR camera with position and orientation
