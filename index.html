@@ -421,7 +421,6 @@
 			        renderer.setRenderTarget(displaySurfaceTargets[index]);
 			        renderer.setClearColor(0x404040); // Background color for surface texture
 			        renderer.clear();
-				getHeadsetPosition();
 			        // Simulate left eye (red tint)
 			        gl.colorMask(1, 0, 0, 0); // Red channel only
 				var eye = getLeftEyePosition();
@@ -432,7 +431,6 @@
 				lCam.projectionMatrix.copy(proj);
 			        renderer.render(scene, leftCamera);
 
-				getHeadsetPosition();
 			        //Simulate right eye (blue-green tint)
 			        gl.colorMask(0, 1, 1, 0); // Blue and green channels only
 			        var eye = getRightEyePosition();
